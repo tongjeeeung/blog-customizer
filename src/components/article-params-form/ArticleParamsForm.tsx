@@ -11,12 +11,13 @@ import {
 	backgroundColors,
 	contentWidthArr,
 } from 'src/constants/articleProps';
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useRef, useState } from 'react';
 import { Select } from '../select';
 import { RadioGroup } from '../radio-group';
 import { Separator } from '../separator';
 import { Text } from '../text';
 import clsx from 'clsx';
+import { useOutsideClickClose } from '../select/hooks/useOutsideClickClose';
 
 type ArticleParamsFormProps = {
 	state: typeof defaultArticleState;
@@ -57,8 +58,16 @@ export const ArticleParamsForm = ({
 		setOpenMenu(!openMenu);
 	};
 
+	const rootRef = useRef(null);
+
+	useOutsideClickClose({
+		isOpen: openMenu,
+		rootRef: rootRef,
+		onChange: toggleMenu,
+	});
+
 	return (
-		<>
+		<div ref={rootRef}>
 			<ArrowButton
 				func={() => {
 					toggleMenu();
@@ -120,6 +129,6 @@ export const ArticleParamsForm = ({
 					</div>
 				</form>
 			</aside>
-		</>
+		</div>
 	);
 };
